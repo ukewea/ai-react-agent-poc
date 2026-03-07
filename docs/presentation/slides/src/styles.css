@@ -1,0 +1,772 @@
+/* ─── Reset & tokens ─────────────────────────────────────────────────────── */
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --bg:        #0d1117;
+  --surface:   #161c2c;
+  --card:      #1c2333;
+  --border:    #2a3550;
+  --text:      #e6edf3;
+  --muted:     #7d8ba1;
+  --accent:    #4f9cf9;
+  --think:     #4f9cf9;
+  --act:       #f97316;
+  --observe:   #22c55e;
+  --quote-bg:  #1c2740;
+}
+
+html, body {
+  height: 100%;
+  overflow: hidden;
+  background: var(--bg);
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  line-height: 1.6;
+}
+
+#root {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ─── Layout shell ───────────────────────────────────────────────────────── */
+
+.presentation {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* ─── Progress bar ───────────────────────────────────────────────────────── */
+
+.progress-bar {
+  height: 3px;
+  background: var(--border);
+  flex-shrink: 0;
+}
+
+.progress-fill {
+  height: 100%;
+  background: var(--accent);
+  transition: width 0.25s ease;
+}
+
+/* ─── Slide area ─────────────────────────────────────────────────────────── */
+
+.slide-area {
+  flex: 1;
+  overflow: hidden;
+  position: relative;
+}
+
+.slide {
+  height: 100%;
+  padding: 2.5rem 4rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: 1.25rem;
+  overflow-y: auto;
+  animation: fadeSlide 0.18s ease;
+}
+
+@keyframes fadeSlide {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0);   }
+}
+
+.slide--center {
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.slide--split {
+  flex-direction: row;
+  align-items: center;
+  gap: 3rem;
+}
+
+.split-left {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+}
+
+.split-right {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.slide-title {
+  font-size: 1.45rem;
+  font-weight: 700;
+  color: var(--accent);
+}
+
+/* ─── Navigation bar ─────────────────────────────────────────────────────── */
+
+.nav-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  padding: 0.55rem 1.5rem;
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+  flex-shrink: 0;
+}
+
+.nav-btn {
+  background: none;
+  border: 1px solid var(--border);
+  color: var(--text);
+  border-radius: 6px;
+  padding: 0.28rem 0.7rem;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background 0.12s, border-color 0.12s;
+}
+
+.nav-btn:hover:not(:disabled) {
+  background: var(--card);
+  border-color: var(--accent);
+}
+
+.nav-btn:disabled {
+  opacity: 0.3;
+  cursor: default;
+}
+
+.notes-toggle-btn.active {
+  background: var(--card);
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.nav-counter {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.88rem;
+  color: var(--muted);
+  min-width: 260px;
+  justify-content: center;
+}
+
+.nav-sep {
+  color: var(--border);
+}
+
+.nav-slide-name {
+  color: var(--text);
+  font-weight: 500;
+  max-width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.key-hint {
+  font-size: 0.75rem;
+  color: var(--border);
+  font-family: monospace;
+  margin-left: 0.5rem;
+}
+
+/* ─── Speaker notes ──────────────────────────────────────────────────────── */
+
+.notes-panel {
+  max-height: 28vh;
+  overflow-y: auto;
+  background: var(--surface);
+  border-top: 2px solid var(--accent);
+  padding: 0.9rem 1.5rem;
+  flex-shrink: 0;
+}
+
+.notes-header {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--accent);
+  margin-bottom: 0.5rem;
+}
+
+.notes-content {
+  font-size: 0.88rem;
+  line-height: 1.75;
+  color: var(--muted);
+  white-space: pre-wrap;
+}
+
+/* ─── Slide 1: Title ─────────────────────────────────────────────────────── */
+
+.title-badge {
+  font-size: 0.78rem;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 0.3rem 1rem;
+  color: var(--muted);
+  margin-bottom: 1rem;
+}
+
+.title-main {
+  font-size: clamp(2.5rem, 5vw, 4.5rem);
+  font-weight: 800;
+  color: var(--text);
+  line-height: 1.1;
+  margin-bottom: 0.75rem;
+}
+
+.title-sub {
+  font-size: 1.15rem;
+  color: var(--muted);
+  max-width: 580px;
+  margin-bottom: 2rem;
+}
+
+.title-footer {
+  margin-top: 1rem;
+}
+
+.key-hint-inline {
+  font-size: 0.78rem;
+  color: var(--border);
+  font-family: monospace;
+}
+
+/* ─── Slide 2: Opening ───────────────────────────────────────────────────── */
+
+.opening-scene {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  max-width: 700px;
+}
+
+.opening-setup {
+  font-size: 1.05rem;
+  color: var(--muted);
+}
+
+.opening-quote {
+  font-size: 1.3rem;
+  font-style: italic;
+  color: var(--text);
+  border-left: 3px solid var(--accent);
+  padding-left: 1.25rem;
+  line-height: 1.7;
+}
+
+.opening-punchline {
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.2;
+}
+
+.opening-note {
+  font-size: 1rem;
+  color: var(--muted);
+  font-style: italic;
+}
+
+/* ─── Slide 3: Gap ───────────────────────────────────────────────────────── */
+
+.impact-block {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  margin-bottom: 1.5rem;
+}
+
+.impact-line {
+  font-size: clamp(1.6rem, 3.2vw, 2.6rem);
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.2;
+}
+
+.impact-line.accent {
+  color: var(--accent);
+}
+
+.gap-note {
+  font-size: 1.05rem;
+  color: var(--muted);
+  max-width: 520px;
+}
+
+/* ─── Slide 4: Agent Definition ─────────────────────────────────────────── */
+
+.definition-text {
+  font-size: 1.05rem;
+  line-height: 1.75;
+  color: var(--text);
+}
+
+.loop-label {
+  font-size: 0.95rem;
+  color: var(--muted);
+}
+
+.loop-label strong {
+  color: var(--accent);
+}
+
+.not-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  margin-top: 0.25rem;
+}
+
+.not-item {
+  font-size: 0.93rem;
+  color: var(--muted);
+  padding: 0.3rem 0.6rem;
+  border-radius: 4px;
+}
+
+.not-item.accent-item {
+  color: var(--observe);
+  background: rgba(34, 197, 94, 0.07);
+  font-weight: 600;
+}
+
+/* ─── Slide 5: Brain & Limbs ─────────────────────────────────────────────── */
+
+.analogy-quote {
+  font-size: 1rem;
+  font-style: italic;
+  color: var(--muted);
+  border-left: 3px solid var(--border);
+  padding-left: 1rem;
+  line-height: 1.7;
+}
+
+.brain-limbs-diagram {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.diagram-box {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1.1rem 1.5rem;
+  text-align: center;
+  width: 210px;
+}
+
+.brain-box  { border-color: var(--think); }
+.limbs-box  { border-color: var(--observe); }
+
+.diagram-icon  { font-size: 1.8rem; margin-bottom: 0.4rem; }
+
+.diagram-label {
+  font-size: 1rem;
+  font-weight: 700;
+  margin-bottom: 0.25rem;
+}
+
+.brain-box  .diagram-label { color: var(--think); }
+.limbs-box  .diagram-label { color: var(--observe); }
+
+.diagram-desc  { font-size: 0.8rem;  color: var(--muted); margin-bottom: 0.3rem; }
+.diagram-limit { font-size: 0.75rem; color: var(--muted); font-style: italic; }
+
+.diagram-connector {
+  font-size: 1.4rem;
+  color: var(--border);
+}
+
+/* ─── Slide 6: Tools ─────────────────────────────────────────────────────── */
+
+.tools-comparison {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 1.4rem 1.75rem;
+}
+
+.tools-col { flex: 1; text-align: center; }
+
+.col-label {
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.4rem;
+}
+
+.without .col-label { color: var(--muted); }
+.with    .col-label { color: var(--observe); }
+
+.col-value { font-size: 1rem; color: var(--text); }
+
+.tools-arrow { font-size: 2rem; color: var(--border); flex-shrink: 0; }
+
+.tools-example {
+  background: var(--quote-bg);
+  border-radius: 8px;
+  padding: 0.9rem 1.2rem;
+  display: flex;
+  gap: 1rem;
+  align-items: baseline;
+}
+
+.example-label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--accent);
+  flex-shrink: 0;
+}
+
+.example-text {
+  font-size: 0.95rem;
+  color: var(--text);
+}
+
+.example-text em { color: var(--observe); font-style: normal; font-weight: 600; }
+
+.tools-principle {
+  font-size: 0.93rem;
+  color: var(--muted);
+  border-left: 3px solid var(--act);
+  padding-left: 1rem;
+  line-height: 1.65;
+}
+
+.tools-principle strong { color: var(--text); }
+
+/* ─── Slide 7: ReAct ─────────────────────────────────────────────────────── */
+
+.react-def {
+  font-size: 2rem;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.react-r    { color: var(--think); }
+.react-a    { color: var(--act); }
+.react-year { font-size: 0.85rem; color: var(--muted); font-weight: 400; }
+
+.react-desc {
+  font-size: 1rem;
+  color: var(--muted);
+}
+
+.react-sequence {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.2rem;
+  max-width: 540px;
+}
+
+.seq-step {
+  display: flex;
+  align-items: baseline;
+  gap: 1rem;
+  background: var(--card);
+  border-radius: 8px;
+  padding: 0.65rem 1.1rem;
+  width: 100%;
+  border-left: 3px solid transparent;
+}
+
+.seq-step.thought     { border-color: var(--think); }
+.seq-step.action      { border-color: var(--act); }
+.seq-step.observation { border-color: var(--observe); }
+
+.seq-label {
+  font-weight: 700;
+  font-size: 0.88rem;
+  min-width: 88px;
+  flex-shrink: 0;
+}
+
+.seq-step.thought     .seq-label { color: var(--think); }
+.seq-step.action      .seq-label { color: var(--act); }
+.seq-step.observation .seq-label { color: var(--observe); }
+
+.seq-desc { font-size: 0.88rem; color: var(--muted); }
+
+.seq-arrow {
+  font-size: 0.95rem;
+  color: var(--border);
+  padding-left: 1.4rem;
+}
+
+.loop-arrow {
+  color: var(--accent);
+  font-style: italic;
+}
+
+/* ─── Slide 8: Workflow ──────────────────────────────────────────────────── */
+
+.four-things {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.thing-label {
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--muted);
+}
+
+.thing-item {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  background: var(--card);
+  border-radius: 8px;
+  padding: 0.55rem 0.9rem;
+}
+
+.thing-num {
+  width: 20px; height: 20px;
+  background: var(--accent);
+  color: #000;
+  border-radius: 50%;
+  font-size: 0.72rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.thing-text { font-size: 0.92rem; color: var(--text); }
+
+.workflow-steps {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  width: 100%;
+}
+
+.workflow-step {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.7rem;
+  padding: 0.45rem 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.workflow-step:last-child { border-bottom: none; }
+
+.step-num {
+  width: 20px; height: 20px;
+  border: 1px solid var(--accent);
+  color: var(--accent);
+  border-radius: 50%;
+  font-size: 0.72rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.step-text { font-size: 0.92rem; color: var(--text); }
+
+.workflow-note {
+  font-size: 0.82rem;
+  color: var(--muted);
+  font-style: italic;
+}
+
+.workflow-error-note {
+  margin-top: 0.9rem;
+  font-size: 0.82rem;
+  color: var(--muted);
+  border-left: 3px solid var(--act);
+  padding-left: 0.75rem;
+  font-style: italic;
+}
+
+/* ─── Slide 9: Example trace ─────────────────────────────────────────────── */
+
+.trace-prompt {
+  font-size: 0.95rem;
+  color: var(--muted);
+  font-style: italic;
+  background: var(--card);
+  border-radius: 8px;
+  padding: 0.7rem 1.1rem;
+  border-left: 3px solid var(--muted);
+}
+
+.trace-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  font-family: 'SFMono-Regular', 'Cascadia Code', 'Fira Code', Consolas, monospace;
+  font-size: 0.86rem;
+}
+
+.trace-step {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.65rem 1.1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.trace-row {
+  display: flex;
+  align-items: baseline;
+  gap: 0.65rem;
+}
+
+.trace-label {
+  font-weight: 700;
+  min-width: 62px;
+  flex-shrink: 0;
+  font-size: 0.78rem;
+}
+
+.thought-label { color: var(--think); }
+.action-label  { color: var(--act); }
+.obs-label     { color: var(--observe); }
+
+.trace-value   { color: var(--text); }
+code.trace-value { font-family: inherit; }
+
+.trace-done {
+  font-family: 'SFMono-Regular', Consolas, monospace;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--observe);
+  padding: 0.15rem 0;
+}
+
+.trace-note {
+  font-size: 0.84rem;
+  color: var(--muted);
+  font-style: italic;
+}
+
+/* ─── Slide 10: Demo ─────────────────────────────────────────────────────── */
+
+.demo-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.1rem;
+  background: var(--card);
+  border: 2px dashed var(--border);
+  border-radius: 16px;
+  padding: 2.5rem 3rem;
+  text-align: center;
+  max-width: 580px;
+}
+
+.demo-icon  { font-size: 2.5rem; color: var(--border); }
+.demo-label { font-size: 1.2rem; font-weight: 600; color: var(--muted); }
+.demo-desc  { font-size: 0.93rem; color: var(--muted); line-height: 1.7; max-width: 420px; }
+.demo-note  { font-size: 0.78rem; color: var(--border); font-style: italic; }
+
+/* ─── Slide 11: What's Next ──────────────────────────────────────────────── */
+
+.next-items {
+  display: flex;
+  gap: 1.5rem;
+  margin: 1rem 0;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.next-item {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1.4rem 1.2rem;
+  text-align: center;
+  flex: 1;
+  min-width: 170px;
+  max-width: 210px;
+}
+
+.next-icon  { font-size: 1.8rem; margin-bottom: 0.6rem; }
+.next-label { font-size: 1rem;   font-weight: 700; color: var(--text); margin-bottom: 0.4rem; }
+.next-desc  { font-size: 0.83rem; color: var(--muted); line-height: 1.5; }
+.next-note  { font-size: 0.95rem; color: var(--muted); max-width: 480px; }
+
+/* ─── Slide 12: Closing ──────────────────────────────────────────────────── */
+
+.closing-tagline {
+  font-size: clamp(2rem, 4vw, 3.5rem);
+  font-weight: 800;
+  color: var(--accent);
+  margin-bottom: 1.5rem;
+}
+
+.closing-summary {
+  display: flex;
+  gap: 2rem;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.summary-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1rem;
+  color: var(--muted);
+}
+
+.summary-key {
+  font-weight: 700;
+  color: var(--text);
+  background: var(--card);
+  padding: 0.2rem 0.6rem;
+  border-radius: 4px;
+  font-size: 0.88rem;
+}
+
+.closing-cta { text-align: center; }
+
+.cta-main {
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--observe);
+  margin-bottom: 0.65rem;
+}
+
+.cta-sub {
+  font-size: 0.9rem;
+  color: var(--muted);
+  max-width: 480px;
+  line-height: 1.65;
+}
