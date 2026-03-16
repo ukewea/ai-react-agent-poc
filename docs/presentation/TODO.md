@@ -37,6 +37,8 @@
 
 ## Demo
 
+- [x] Choose the main demo example
+- [x] Choose a smaller supporting example
 - [ ] Choose a demo task that visibly changes external state
 - [ ] Define the exact agent tools used in the demo
 - [ ] Write the demo narration script
@@ -56,3 +58,9 @@
 - [ ] What is the audience background and technical level?
 - [ ] How formal should the tone be?
 - [ ] Should the demo be code-focused or product-focused?
+
+## Chosen Examples
+
+- Main demo: `Team Meeting Scheduler`
+- Supporting mini example: `目前全球市值最高的公司是哪家？他們的 CEO 是誰？幾歲了？`
+- Backup / extra material: `Release Readiness Check`
